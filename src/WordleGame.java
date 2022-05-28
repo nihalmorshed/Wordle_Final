@@ -10,20 +10,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.Border;
 
-public class WordleGame implements ActionListener {
+public class WordleGame extends JFrame implements ActionListener {
     private static Font normalFont = new Font ("Times New Roman", Font.BOLD, 25);
     private static Font textfieldfont = new Font ("Comic Sans MS", Font.PLAIN, 20);
     private static Font notificationfont = new Font ("Times New Roman", Font.BOLD, 15);
     private static Font notificationgreen = new Font ("Times New Roman", Font.BOLD, 13);
+
 
     class WordPanel extends JPanel {
 
@@ -92,8 +87,22 @@ public class WordleGame implements ActionListener {
         gameFrame.setSize (Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         gameFrame.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
         gameFrame.setLayout (new GridLayout (7, 1));
-        gameFrame.setVisible (true);
         gameFrame.setLocationRelativeTo (null);
+
+        JMenuBar menuBar = new JMenuBar ();
+        JMenu GameMenu = new JMenu ("Game");
+        JMenu HelpMenu = new JMenu ("Help");
+        JMenuItem LeaderBoard = new JMenuItem ("LeaderBoard");
+        JMenuItem exit = new JMenuItem ("Exit");
+        JMenuItem howtoplay = new JMenuItem ("How-To-Play");
+        menuBar.add (GameMenu);
+        menuBar.add (HelpMenu);
+        GameMenu.add (LeaderBoard);
+        GameMenu.add (exit);
+        HelpMenu.add (howtoplay);
+        gameFrame.setJMenuBar (menuBar);
+        gameFrame.setVisible (true);
+
 
         for (int i = 0; i < 6; i++) {
             wordPanelArray[i] = new WordPanel ();
