@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -18,7 +17,62 @@ public class WordleGame extends JFrame implements ActionListener {
     private static Font textfieldfont = new Font ("Comic Sans MS", Font.PLAIN, 20);
     private static Font notificationfont = new Font ("Times New Roman", Font.BOLD, 15);
     private static Font notificationgreen = new Font ("Times New Roman", Font.BOLD, 13);
+    private String highscore = "";
 
+    public String getHighscore() {
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+        try {
+            fileReader = new FileReader ("HighScore.dat");
+            bufferedReader = new BufferedReader (fileReader);
+            return bufferedReader.readLine ();
+        } catch (Exception e) {
+            return "Nobody:7";
+        } finally {
+            try {
+                if (bufferedReader != null)
+                    bufferedReader.close ();
+            } catch (IOException e) {
+                e.printStackTrace ();
+            }
+        }
+    }
+
+    public void checkScore() {
+        if (highscore.equals ("")) {
+            return;
+        }
+        if (tries < Integer.parseInt (highscore.split (":")[1])) {
+            String name = JOptionPane.showInputDialog ("You set a Highscore! Whats Your name?");
+            highscore = name + ":" + (tries+1);
+            File scoreFile = new File ("HighScore.dat");
+            if (!scoreFile.exists ()) {
+                try {
+                    scoreFile.createNewFile ();
+                } catch (IOException e) {
+                    e.printStackTrace ();
+                }
+            }
+            FileWriter writeFile = null;
+            BufferedWriter writer = null;
+            try {
+                writeFile = new FileWriter (scoreFile);
+                writer = new BufferedWriter (writeFile);
+                writer.write (this.highscore);
+
+            } catch (IOException e) {
+                e.printStackTrace ();
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close ();
+                    } catch (IOException e) {
+                        e.printStackTrace ();
+                    }
+                }
+            }
+        }
+    }
 
     class WordPanel extends JPanel {
 
@@ -118,6 +172,10 @@ public class WordleGame extends JFrame implements ActionListener {
         System.out.println ("Word for the day : " + wordleString);
         startTime = System.currentTimeMillis ();
         tries = 0;
+        checkScore ();
+        if (highscore.equals ("")) {
+            highscore = getHighscore ();
+        }
     }
 
     public static void main(String[] args) {
@@ -131,14 +189,16 @@ public class WordleGame extends JFrame implements ActionListener {
         if (userWord.length () > 4) {
             if (isWordleWordEqualTo (userWord.trim ().toUpperCase ())) {
                 clearAllPanels ();
-                JOptionPane.showMessageDialog (null, "You Win!! You Found The Answer in " + ((System.currentTimeMillis () - startTime) / 1000) + " seconds and " + (tries + 1) + " tries.", "Congrats", JOptionPane.INFORMATION_MESSAGE);
+                checkScore ();
+                JOptionPane.showMessageDialog (null, "Current Highscore is " + highscore + ". You Win!! You Found The Answer in " + ((System.currentTimeMillis () - startTime) / 1000) + " seconds and " + (tries + 1) + " tries.", "Congrats", JOptionPane.INFORMATION_MESSAGE);
                 gameFrame.dispose ();
                 return;
             }
         }
         if (count > 4) {
-            JOptionPane.showMessageDialog (null, "The Answer Was: " + wordleString + ". Better luck next time!!", "Oops",
-                    JOptionPane.INFORMATION_MESSAGE);
+            checkScore ();
+            String option[]= {"Retry?"};
+            JOptionPane.showOptionDialog (null, "The Answer Was: " + wordleString + ". Better luck next time!!", "Oops", JOptionPane.OK_OPTION,JOptionPane.INFORMATION_MESSAGE,null, option,0);
             gameFrame.setVisible (false);
             new WordleGame ();
             return;
