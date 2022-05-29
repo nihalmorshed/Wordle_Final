@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class WordleGame extends JFrame implements ActionListener {
     private static Font normalFont = new Font ("Times New Roman", Font.BOLD, 25);
@@ -133,6 +135,7 @@ public class WordleGame extends JFrame implements ActionListener {
     private UserPanel userPanel;
     private String wordleString;
     static long startTime;
+    static long time;
     static int tries;
     private int count = 0;
 
@@ -147,8 +150,43 @@ public class WordleGame extends JFrame implements ActionListener {
         JMenu GameMenu = new JMenu ("Game");
         JMenu HelpMenu = new JMenu ("Help");
         JMenuItem LeaderBoard = new JMenuItem ("LeaderBoard");
+        LeaderBoard.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Leaderboard ();
+            }
+        });
         JMenuItem exit = new JMenuItem ("Exit");
+        exit.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit (0);
+            }
+        });
         JMenuItem howtoplay = new JMenuItem ("How-To-Play");
+        howtoplay.addActionListener (new ActionListener () {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame leaderboardframe = new JFrame ();
+                leaderboardframe.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+                leaderboardframe.setTitle ("How To Play");
+                leaderboardframe.setLayout (new FlowLayout ());
+                JPanel panel = new JPanel();
+                JLabel jlabel = new JLabel();
+                JTextArea jTextField= new JTextArea ();
+                jTextField.setLineWrap (true);
+                jTextField.setText( Constants.HOWTOPLAY);
+                jTextField.setFont(new Font("Verdana",1,15));
+                jTextField.setPreferredSize (new Dimension (800,200));
+                leaderboardframe.add(jTextField);
+//                panel.setBorder(new LineBorder (Color.BLACK)); // make it easy to see
+//                leaderboardframe.add(panel);
+                leaderboardframe.setSize(600, 600);
+                leaderboardframe.setLocationRelativeTo(null);
+                leaderboardframe.pack ();
+                leaderboardframe.setVisible (true);
+            }
+        });
         menuBar.add (GameMenu);
         menuBar.add (HelpMenu);
         GameMenu.add (LeaderBoard);
@@ -190,7 +228,9 @@ public class WordleGame extends JFrame implements ActionListener {
             if (isWordleWordEqualTo (userWord.trim ().toUpperCase ())) {
                 clearAllPanels ();
                 checkScore ();
-                JOptionPane.showMessageDialog (null, "Current Highscore is " + highscore + ". You Win!! You Found The Answer in " + ((System.currentTimeMillis () - startTime) / 1000) + " seconds and " + (tries + 1) + " tries.", "Congrats", JOptionPane.INFORMATION_MESSAGE);
+                time=((System.currentTimeMillis () - startTime) / 1000);
+                setScore ();
+                JOptionPane.showMessageDialog (null, "Current Highscore is " + highscore + ". You Win!! You Found The Answer in " + time + " seconds and " + (tries + 1) + " tries.", "Congrats", JOptionPane.INFORMATION_MESSAGE);
                 gameFrame.dispose ();
                 return;
             }
@@ -207,6 +247,17 @@ public class WordleGame extends JFrame implements ActionListener {
         tries++;
         this.userPanel.userInput.setText ("");
 
+    }
+    public void setScore(){
+        FileWriter fw;
+        try {
+            fw= new FileWriter (new File ("Score.txt"),true);
+
+            fw.write ((tries+1)+"/"+time+"\n");
+            fw.close ();
+        } catch (IOException e) {
+            e.printStackTrace ();
+        }
     }
 
     private void clearAllPanels() {
