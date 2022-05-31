@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,8 +122,10 @@ public class Leaderboard extends JFrame {
     }
 
     public Leaderboard() {
-        setSize (400, 400);
+        setSize (Constants.LEADERBOARD_WIDTH, Constants.LEADERBOARD_HEIGHT);
         setTitle ("LeaderBoard");
+        setLocationRelativeTo (null);
+        setLayout (new FlowLayout ());
         setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
         File scorefile = new File ("SortedScore.txt");
         JTable jTable1;
@@ -141,6 +144,8 @@ public class Leaderboard extends JFrame {
                 String[] dataRow = line.split ("/");
                 model.addRow (dataRow);
             }
+            jTable1.setPreferredScrollableViewportSize (new Dimension (350,80));
+            jTable1.setFillsViewportHeight (true);
             JScrollPane jScrollPane = new JScrollPane (jTable1);
             add (jScrollPane);
             validate ();
