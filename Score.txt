@@ -9,3 +9,6 @@ Jiraya/1/23
 Aldrin/2/21
 Tucker/3/36
 Rabindranath/5/79
+Mahi/4/551
+Klinsmann/2/12
+Bastien/3/16

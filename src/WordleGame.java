@@ -46,7 +46,7 @@ public class WordleGame extends JFrame implements ActionListener {
         }
         if (tries < Integer.parseInt (highscore.split (":")[1])) {
             String name = JOptionPane.showInputDialog ("You set a Highscore! Whats Your name?");
-            highscore = name + ":" + (tries+1);
+            highscore = name + ":" + (tries + 1);
             File scoreFile = new File ("HighScore.dat");
             if (!scoreFile.exists ()) {
                 try {
@@ -172,16 +172,16 @@ public class WordleGame extends JFrame implements ActionListener {
                 leaderboardframe.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
                 leaderboardframe.setTitle ("How To Play");
                 leaderboardframe.setLayout (new FlowLayout ());
-                JPanel panel = new JPanel();
-                JLabel jlabel = new JLabel();
-                JTextArea jTextField= new JTextArea ();
+                JPanel panel = new JPanel ();
+                JLabel jlabel = new JLabel ();
+                JTextArea jTextField = new JTextArea ();
                 jTextField.setLineWrap (true);
-                jTextField.setText( Constants.HOWTOPLAY);
-                jTextField.setFont(new Font("Verdana",1,15));
-                jTextField.setPreferredSize (new Dimension (800,200));
-                leaderboardframe.add(jTextField);
-                leaderboardframe.setSize(600, 600);
-                leaderboardframe.setLocationRelativeTo(null);
+                jTextField.setText (Constants.HOWTOPLAY);
+                jTextField.setFont (new Font ("Verdana", 1, 15));
+                jTextField.setPreferredSize (new Dimension (800, 200));
+                leaderboardframe.add (jTextField);
+                leaderboardframe.setSize (600, 600);
+                leaderboardframe.setLocationRelativeTo (null);
                 leaderboardframe.pack ();
                 leaderboardframe.setVisible (true);
             }
@@ -227,17 +227,26 @@ public class WordleGame extends JFrame implements ActionListener {
             if (isWordleWordEqualTo (userWord.trim ().toUpperCase ())) {
                 clearAllPanels ();
                 checkScore ();
-                time=((System.currentTimeMillis () - startTime) / 1000);
-                name = JOptionPane.showInputDialog ("Current Highscore is "+highscore+" You win!! You Found The Answer in "+ time + " seconds and " + (tries + 1) + " tries. Whats Your name?");
+                time = ((System.currentTimeMillis () - startTime) / 1000);
+                name = JOptionPane.showInputDialog ("Current Highscore is " + highscore + " You win!! You Found The Answer in " + time + " seconds and " + (tries + 1) + " tries. Whats Your name?");
                 setScore ();
-                gameFrame.dispose ();
-                return;
+                int answer = JOptionPane.showConfirmDialog (null, "Want to play again?", "Replay?", JOptionPane.YES_NO_OPTION);
+                if (answer == JOptionPane.YES_OPTION) {
+                    gameFrame.setVisible (false);
+                    new WordleGame ();
+                    return;
+
+                } else if (answer == JOptionPane.NO_OPTION) {
+                    gameFrame.dispose ();
+                    return;
+                }
+
             }
         }
         if (count > 4) {
             checkScore ();
-            String option[]= {"Retry?"};
-            JOptionPane.showOptionDialog (null, "The Answer Was: " + wordleString + ". Better luck next time!!", "Oops", JOptionPane.OK_OPTION,JOptionPane.INFORMATION_MESSAGE,null, option,0);
+            String option[] = {"Retry?"};
+            JOptionPane.showOptionDialog (null, "The Answer Was: " + wordleString + ". Better luck next time!!", "Oops", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, option, 0);
             gameFrame.setVisible (false);
             new WordleGame ();
             return;
@@ -247,11 +256,12 @@ public class WordleGame extends JFrame implements ActionListener {
         this.userPanel.userInput.setText ("");
 
     }
-    public void setScore(){
+
+    public void setScore() {
         FileWriter fw;
         try {
-            fw= new FileWriter (new File ("Score.txt"),true);
-            fw.write (name+"/"+(tries+1)+"/"+time+"\n");
+            fw = new FileWriter (new File ("Score.txt"), true);
+            fw.write (name + "/" + (tries + 1) + "/" + time + "\n");
             fw.close ();
         } catch (IOException e) {
             e.printStackTrace ();
