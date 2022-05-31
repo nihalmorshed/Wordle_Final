@@ -136,6 +136,7 @@ public class WordleGame extends JFrame implements ActionListener {
     private String wordleString;
     static long startTime;
     static long time;
+    static String name;
     static int tries;
     private int count = 0;
 
@@ -179,8 +180,6 @@ public class WordleGame extends JFrame implements ActionListener {
                 jTextField.setFont(new Font("Verdana",1,15));
                 jTextField.setPreferredSize (new Dimension (800,200));
                 leaderboardframe.add(jTextField);
-//                panel.setBorder(new LineBorder (Color.BLACK)); // make it easy to see
-//                leaderboardframe.add(panel);
                 leaderboardframe.setSize(600, 600);
                 leaderboardframe.setLocationRelativeTo(null);
                 leaderboardframe.pack ();
@@ -229,8 +228,8 @@ public class WordleGame extends JFrame implements ActionListener {
                 clearAllPanels ();
                 checkScore ();
                 time=((System.currentTimeMillis () - startTime) / 1000);
+                name = JOptionPane.showInputDialog ("Current Highscore is "+highscore+" You win!! You Found The Answer in "+ time + " seconds and " + (tries + 1) + " tries. Whats Your name?");
                 setScore ();
-                JOptionPane.showMessageDialog (null, "Current Highscore is " + highscore + ". You Win!! You Found The Answer in " + time + " seconds and " + (tries + 1) + " tries.", "Congrats", JOptionPane.INFORMATION_MESSAGE);
                 gameFrame.dispose ();
                 return;
             }
@@ -252,8 +251,7 @@ public class WordleGame extends JFrame implements ActionListener {
         FileWriter fw;
         try {
             fw= new FileWriter (new File ("Score.txt"),true);
-
-            fw.write ((tries+1)+"/"+time+"\n");
+            fw.write (name+"/"+(tries+1)+"/"+time+"\n");
             fw.close ();
         } catch (IOException e) {
             e.printStackTrace ();
