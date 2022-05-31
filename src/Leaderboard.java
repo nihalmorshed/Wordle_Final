@@ -26,7 +26,8 @@ class nameCompare implements Comparator<player> {
 class triesCompare implements Comparator<player> {
     @Override
     public int compare(player s1, player s2) {
-        return s1.attempts - s2.attempts;
+        int dateComparison = Integer.compare (s1.attempts,s2.attempts);
+        return dateComparison == 0 ? Integer.compare (s1.time,s2.time)  : dateComparison;
     }
 }
 
@@ -121,6 +122,7 @@ public class Leaderboard extends JFrame {
 
     public Leaderboard() {
         setSize (400, 400);
+        setTitle ("LeaderBoard");
         setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
         File scorefile = new File ("SortedScore.txt");
         JTable jTable1;

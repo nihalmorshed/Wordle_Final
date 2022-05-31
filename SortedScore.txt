@@ -1,5 +1,7 @@
 Nihal/1/12
- Minato/2/78
+Morshed/1/13
+Jiraya/1/23
+Minato/2/78
 Kakashi/3/23
 Sasuke/4/24
 Hinata/5/36
