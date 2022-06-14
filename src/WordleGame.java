@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
+
 
 public class WordleGame extends JFrame implements ActionListener {
     private static Font normalFont = new Font ("Times New Roman", Font.BOLD, 25);
@@ -143,7 +142,7 @@ public class WordleGame extends JFrame implements ActionListener {
     public WordleGame() {
         gameFrame = new JFrame (Constants.SCREEN_TITLE);
         gameFrame.setSize (Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        gameFrame.setDefaultCloseOperation (JFrame.DISPOSE_ON_CLOSE);
+        gameFrame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
         gameFrame.setLayout (new GridLayout (7, 1));
         gameFrame.setLocationRelativeTo (null);
 
@@ -306,7 +305,6 @@ public class WordleGame extends JFrame implements ActionListener {
         try {
             wordList = Files.readAllLines (path);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace ();
         }
         Random random = new Random ();
