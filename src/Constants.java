@@ -8,7 +8,7 @@ public class Constants {
             "After Each guess, the background color of the letter turns:\n" +
             "\'Yellow\': If the letter is correct but is placed wrong in the word.\n" +
             "\'Green\': If the letter is correctly placed in the word.\n" +
-            "\'Yellow\': If the letter is incorrect.\n\n" +
+            "\'Grey\': If the letter is incorrect.\n\n" +
             "The Player have to guess the correct word within given attempts in order to win." ;
 
 
